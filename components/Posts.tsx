@@ -1,12 +1,22 @@
+"use client";
+import { useEffect } from "react";
+import { usePost } from "@/store";
 import Link from "next/link";
-import React from "react";
+import { shallow } from "zustand/shallow";
 
-type Props = {
- posts: any[];
-};
+export const Posts = () => {
+ const [posts, loading, getAllPosts] = usePost(
+  (state) => [state.posts, state.loading, state.getAllPosts],
+  shallow
+ );
 
-export const Posts = ({ posts }: Props) => {
- return (
+ useEffect(() => {
+  getAllPosts();
+ }, [getAllPosts]);
+
+ return loading ? (
+  <h3>Loading...</h3>
+ ) : (
   <ul>
    {posts.map((posts: any) => (
     <li key={posts.id}>
